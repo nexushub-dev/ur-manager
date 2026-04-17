@@ -4,23 +4,25 @@ jobs:
   build:
     runs-on: ubuntu-22.04
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
       - name: Set up Python
-        uses: actions/setup-python@v4
+        uses: actions/setup-python@v5
         with:
           python-version: '3.10'
       - name: Install dependencies
         run: |
           sudo apt-get update
-          sudo apt-get install -y python3-pip build-essential git python3-dev ffmpeg libsdl2-dev libsdl2-image-dev libsdl2-mixer-dev libsdl2-ttf-dev libportmidi-dev libswscale-dev libavformat-dev libavcodec-dev zlib1g-dev
+          sudo apt-get install -y python3-pip build-essential git python3-dev ffmpeg libsdl2-dev libsdl2-image-dev libsdl2-mixer-dev libsdl2-ttf-dev libportmidi-dev libswscale-dev libavformat-dev libavcodec-dev zlib1g-dev autoconf automake libtool
           pip install buildozer cython
       - name: Extract project
         run: |
           unzip ur_manager.zip -d project
+          ls "project/ur manager"
       - name: Build APK
         run: |
           cd "project/ur manager"
-          yes | buildozer android debug
+          cat buildozer.spec | head -20
+          yes | buildozer -v android debug 2>&1
       - name: Upload APK
         uses: actions/upload-artifact@v4
         with:
